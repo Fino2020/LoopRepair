@@ -1,9 +1,0 @@
-**
-!setup.cfg
-!setup.py
-!shim.py
-!src/crashrepair
-!src/tree-sitter
-!tree-sitter
-!Pipfile
-!Pipfile.lock
