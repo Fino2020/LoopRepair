@@ -1,0 +1,76 @@
+# note that we build on top of xenial to ensure maximum glibc compatibility
+# - see https://pyinstaller.org/en/stable/usage.html#making-gnu-linux-apps-forward-compatible
+# - alternatively, we could try to use staticx on the pyinstaller-generated binary
+FROM ubuntu:xenial-20210416 AS builder
+#ARG DEBIAN_FRONTEND=noninteractive
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+
+RUN apt-get update -qq \
+ && apt-key adv --refresh-keys --keyserver keyserver.ubuntu.com \
+ && apt-get install -y --no-install-recommends \
+      build-essential \
+      ca-certificates \
+      curl \
+      g++ \
+      gcc \
+      git \
+      libbz2-dev \
+      libffi-dev \
+      liblzma-dev \
+      libncursesw5-dev \
+      libcurl4-openssl-dev  \
+      libreadline-dev \
+      libsqlite3-dev \
+      nghttp2  \
+      libnghttp2-dev \
+      libssl-dev \
+      libxml2-dev \
+      libxmlsec1-dev \
+      llvm \
+      make \
+      software-properties-common \
+      tk-dev \
+      wget \
+      xz-utils \
+      zlib1g-dev
+
+RUN apt-get update -qq
+
+# install pyenv
+#ARG PYENV_GIT_TAG=v2.2.5
+RUN curl https://pyenv.run | bash
+ENV PATH "/root/.pyenv/bin:$PATH"
+#COPY pyenv /root/.pyenv
+#RUN cd /root/.pyenv && src/configure && make -C src
+
+# install python 3.9 via pyenv
+RUN eval "$(pyenv init --path)" \
+ && eval "$(pyenv init -)" \
+ && export CFLAGS="-fPIC ${CFLAGS:-}" \
+ && export PYTHON_CONFIGURE_OPTS="--enable-shared" \
+ && pyenv install 3.9.11 \
+ && pyenv global 3.9.11 \
+ && pip install pipenv==2022.6.7
+
+# install package and convert to a portable executable
+WORKDIR /tmp/crashrepair
+ARG CACHEBUST=1
+RUN echo "Cache bust: $CACHEBUST"
+COPY . /tmp/crashrepair
+
+
+RUN eval "$(pyenv init --path)" \
+ && eval "$(pyenv init -)" \
+ && pipenv install --dev \
+ && pipenv install -e . \
+ && pipenv run mypy src \
+ && pipenv run pyinstaller --add-binary "tree-sitter/build/my-languages.so:." --additional-hooks-dir="hooks" --onefile shim.py \
+ && mkdir -p /opt/crashrepair/bin \
+ && cp ./dist/shim /opt/crashrepair/bin \
+ && mv /opt/crashrepair/bin/shim /opt/crashrepair/bin/crashrepair \
+ && rm -rf /tmp/*
+
+
+FROM ubuntu:xenial-20210416 AS shim
+COPY --from=builder /opt/crashrepair/bin/crashrepair /opt/crashrepair/bin/crashrepair
