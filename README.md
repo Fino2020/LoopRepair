@@ -1,65 +1,30 @@
-## Orchestrator Module
+## LoopRepair
 
-The orchestrator provides a simple command-line front-end for CrashRepair which integrates its analysis, repair, and fuzzing modules.
+LoopRepair improves iterative repair strategies by location-aware and trace-guided iterative Automated Vulnerability Repair (AVR).
 
-## Usage
-
-The orchestrator is bundled as a standalone executable, `crashrepair`, in the all-in-one Docker image for CrashRepair.
-To run the orchestrator on a given bug scenario, you should execute the following:
+## Install VulnLoc+ Dataset
 
 ```
-crashrepair repair bug.json
+git clone https://github.com/nus-apr/CrashRepair.git
+cd CrashRepair
+./scripts/install
 ```
 
-where `bug.json` points to the bug.json file for the bug scenario.
-Details on the format of `bug.json` are provided below.
-
-Note that the following options can be passed to the `repair` command above:
-
-* `--no-fuzzing`: disables the use of the concentrated fuzzer to create additional test cases for patch validation
-* `--stop-early`: instructs CrashRepair to stop running as soon as the first plausible patch has been discovered.
-  A plausible patch is one that passes both the proof-of-crash and all of the additional fuzzer-generated tests.
-  If this option is not enabled, CrashRepair will produce as many repairs until either it has reached a resource limit (e.g., wall-clock time, number of patches) or all candidate repairs have been exhausted.
-
-For a more complete and up-to-date list of command-line options, use `--help`:
-
+It is worth noting that some projects should be executed with special version (project version):
 ```
-crashrepair repair --help
+spdlog v1.12.0
+z3 z3-4.13.4
+pegtl main
 ```
+please git checkout to the special version of these three project. Otherwise, this dataset project will error.
 
+Futhermore, the `crepair:aio` image is 23.8GB in size, so please check that the installed image is correct.
 
-## `bug.json` File Format
-
-Below is an example of a `bug.json` file, taken from the `buffer-overflow/dynamic-array` test program:
-
-```json
-{
-  "project": {
-    "name": "buffer-overflow"
-  },
-  "name": "dynamic-array",
-  "binary": "src/test",
-  "crash": {
-    "command": "$POC",
-    "input": "./exploit",
-    "extra-klee-flags": "",
-    "expected-exit-code": 0
-  },
-  "source-directory": "src",
-  "build": {
-    "directory": "src",
-    "binary": "test",
-    "commands": {
-      "prebuild": "exit 0",
-      "clean": "make clean",
-      "build": "make"
-    }
-  }
-}
-```
-
-* The `crash` section is used to provide the CrashRepair analyzer with the necessary information to diagnose the crash and produce an annotated fix localization. **(FIXME: resolve ambiguity between file-based and argument-based inputs.)**
-  * The optional `extra-klee-flags` property is used to inject additional KLEE flags, given as a string, at link time when the analyzer rebuilds the program.
-    In all cases, `--link-llvm-lib=/CrashRepair/lib/libcrepair_proxy.bca` will always be injected as a KLEE flag.
-  * The `expected-exit-code` property is used to specify what exit code should be produced by the program if the crash is resolved.
-    If this property is left unspecified, it assumes its default value of `0`.
+## Run LoopRepair
+- Step 1: Download our looprepair project to `path/to/looprepair`.
+- Step 2: If you have installed this docker, use `docker run -v path/to/looprepair/results:/results -v path/to/looprepair/logs:/logs -v path/to/looprepair/src:/looprepair -t crepair:aio` to create the container 
+- Step 3: `docker exec -it crepair:aio bash` to get into the container.
+- Step 4: Install the Anaconda3 `wegt the Anaconda3-2024.02-1-Linux-x86_64.sh by yourself` and `./Anaconda3-2024.02-1-Linux-x86_64.sh`.
+- Step 5: Add the Anaconda environment variable. Create a vitual environment `conda create -n looprepair python=3.9.11`
+- Step 6: `cd /looprepair/crashrepair` and `pip install -r requirements.txt` to install packages.
+- Step 7: `python run.py` to run repair. *Noting that cp the /data/ directory first `cp /data/ /data_bak/`, because the original program will be modified if you terminate.*
