@@ -12,8 +12,8 @@ from tree_sitter import Language, Parser
 import tempfile
 import subprocess
 
-openai.api_key = "sk-EB6KoO8Pq4ZRycbefzGYM9M07DVJXSUzjYUJBd71OXK4cmv7"
-openai.base_url = 'https://chatapi.onechats.top/v1/'
+openai.api_key = ""
+openai.base_url = ''
 client = OpenAI(api_key=openai.api_key, base_url=openai.base_url)
 
 
