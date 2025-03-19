@@ -17,11 +17,6 @@ openai.base_url = ''
 client = OpenAI(api_key=openai.api_key, base_url=openai.base_url)
 
 
-# client = OpenAI(
-# 	# openai系列的sdk，包括langchain，都需要这个/v1的后缀
-# 	base_url='https://api.openai-proxy.org/v1',
-# 	api_key='sk-Bk5q9w6QIIVLvjOoFT2nWfR3VkZYvSn1pRUov90m5CCH7vYH',
-# )
 def get_response(question):
     response = client.chat.completions.create(
         # model="gpt-4o-2024-05-13",
