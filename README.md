@@ -36,7 +36,7 @@ ___Step 3___: Use the following code to get into the container.
 docker exec -it crepair:aio bash
 ``` 
 
-___Step 4___: Install the Anaconda3 wegt the Anaconda3-2024.02-1-Linux-x86_64.sh by yourself and install Anaconda3. 
+___Step 4___: Install the Anaconda3. wegt the Anaconda3-2024.02-1-Linux-x86_64.sh by yourself and install Anaconda3. 
 
 ```
 ./Anaconda3-2024.02-1-Linux-x86_64.sh
