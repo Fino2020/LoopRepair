@@ -24,7 +24,7 @@ Futhermore, the `crepair:aio` image is 23.8GB in size, so please check that the 
 ## Run LoopRepair
 ___Step 1___: Download our looprepair project to `path/to/looprepair`.
 
-___Step 2___: If you have installed this docker, use the following code to create the container.
+___Step 2___: If you have installed this docker image, use the following code to create the container.
 
 ```
 docker run --name LoopRepair -v path/to/looprepair/results:/results -v path/to/looprepair/logs:/logs -v path/to/looprepair/src:/looprepair -t crepair:aio
