@@ -54,7 +54,7 @@ ___Step 6___: pip install these packages that needed.
 cd /looprepair/crashrepair && pip install -r requirements.txt
 ```
 
-___Step 7___: Add OpenAI API key in LLMRepair.py.
+___Step 7___: Add OpenAI API key in `LLMRepair.py`.
 
 
 ___Step 8___: Run repair. *Noting that `copy` the `/data/` directory first using `cp /data/ /data_bak/`, because the original program will be modified if you terminate.*
