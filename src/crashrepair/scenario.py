@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 import subprocess
 import typing as t
@@ -418,7 +419,43 @@ class Scenario:
             self,
             timeout_minutes=self.time_limit_minutes_analysis,
         )
-        analyzer.run(write_to=self.analysis_directory)
+        try:
+            analyzer.run(write_to=self.analysis_directory)
+        except AnalyzerCrashed as e:
+            logger.info(f"analysis failed: {e}, use location in logs")
+            # 如果CrashAnalysis崩溃了，那就从日志中获取错误信息
+            # 日志位置
+            # log_path = os.path.join('/logs', self.subject, self.name, "orchestrator.log")
+            # with open(log_path, "r") as fh:
+            #     log = fh.read()
+            #     # 定义正则表达式
+            #     crash_location_pattern = r'\[info\] crash location: (.+)'
+            #     constraint_pattern = r'\[info\] crash free constraint: (.+)'
+            #     # 查找所有匹配项
+            #     crash_location_matches = re.findall(crash_location_pattern, log)
+            #     constraint_matches = re.findall(constraint_pattern, log)
+            #     last_crash_location: str = ''
+            #     last_constraint: str = ''
+            #     # 获取最后一个匹配项
+            #     if crash_location_matches:
+            #         last_crash_location = crash_location_matches[-1].replace('[0m', '')
+            #     else:
+            #         print("No crash location found.")
+            #
+            #     if constraint_matches:
+            #         last_constraint = constraint_matches[-1].replace('[0m', '')
+            #         print(last_constraint)
+            #     if crash_location_matches:
+            #         if not os.path.exists(self.analysis_directory):
+            #             os.makedirs(self.analysis_directory)
+            #         with open(self.localization_path, 'w', encoding='utf-8') as f_write:
+            #             f_write.write(json.dumps([{
+            #                 'constraint': last_constraint,
+            #                 'location': last_crash_location,
+            #                 'distance': -1,
+            #                 'values-file': '',
+            #                 'variables': [],
+            #             }], ensure_ascii=False, indent=4))
 
     def fuzz(self) -> None:
         """Generates additional test cases via concentrated fuzzing."""
@@ -610,7 +647,7 @@ class Scenario:
                     with open(os.path.join(self.analysis_directory, "klee-out-taint-0", 'taint.log')) as f:
                         readline = f.readline()
                         average = float(len(readline))
-            # 基于约束的排序方式
+            # # 基于约束的排序方式
             # if os.path.exists(self.localization_path):
             #     with open(self.localization_path, 'r', encoding='utf-8') as f:
             #         localization_json = json.loads(f.read())
@@ -809,7 +846,6 @@ class Scenario:
         # 删掉analysis_for_guide['candidates']中每个i['localization_result']为[]的元素
         analysis_for_guide['candidates'] = [i for i in analysis_for_guide['candidates'] if i['localization_result']]
         # 如果analysis_for_guide['candidates']超过2个元素，按照impact_lines字段的数字大小进行降序排序，并只取前两个元素
-        # analysis_for_guide['candidates'] = analysis_for_guide['candidates'][:2]
         if len(analysis_for_guide['candidates']) > 2:
             analysis_for_guide['candidates'] = sorted(
                 analysis_for_guide['candidates'],
