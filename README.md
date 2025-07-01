@@ -91,3 +91,8 @@ ___Step 8___: Run repair. *Noting that `copy` the `/data/` directory first using
     ```
     python run.py
     ```
+3. _Remove `/data/` dataset and replace it using `/data_bak`._
+    ```
+    rm -rf /data/ 
+    cp /data_bak/ /data/
+    ```
