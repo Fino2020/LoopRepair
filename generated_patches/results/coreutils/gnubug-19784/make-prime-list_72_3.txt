@@ -1,0 +1,19 @@
+@@ -66,15 +66,17 @@
+     }
+ }
+ 
++
+ static void
+ process_prime (struct prime *info, unsigned p)
+ {
+-  wide_uint max = -1;
++  wide_uint max = UINT64_MAX; // Use a safe maximum value based on the type
+   info->p = p;
+   info->pinv = binvert (p);
+   info->lim = max / p;
+ }
+ 
++
+ static void
+ print_wide_uint (wide_uint n, int nesting, unsigned wide_uint_bits)
+ {

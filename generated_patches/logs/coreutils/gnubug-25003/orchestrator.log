@@ -1,0 +1,95 @@
+2025-02-08 17:17:04.275 | INFO     | scenario:build:266 - loaded bug scenario: Scenario(subject='coreutils', name='gnubug-25003', directory='/data/vulnloc/coreutils/gnubug-25003', build_directory='/data/vulnloc/coreutils/gnubug-25003/src', source_directory='/data/vulnloc/coreutils/gnubug-25003/src', tag_id='coreutils_gnubug-25003', binary_path='/data/vulnloc/coreutils/gnubug-25003/src/src/split', clean_command='make clean', prebuild_command='exit 0', build_command='make CFLAGS="-ggdb -fPIC -fPIE ${INJECT_CFLAGS:-}" CXXFLAGS="-ggdb -fPIC -fPIE ${INJECT_CXXFLAGS:-}" LDFLAGS="${INJECT_LDFLAGS:-}" src/split', crashing_command='-n7/75 /dev/null', crashing_input='', shell=Shell(cwd='/data/vulnloc/coreutils/gnubug-25003'), crash_test=Test(name='crash', command='/data/vulnloc/coreutils/gnubug-25003/src/src/split -n7/75 /dev/null', expected_exit_code=0, expected_stdout=None, bad_output='SUMMARY: AddressSanitizer', asan_options=None, ubsan_options=None), sanitizer_flags='-fsanitize=address', additional_klee_flags='', expected_exit_code_for_crashing_input=0, should_terminate_early=True, fuzzer_tests=[], fuzzer=None, time_limit_minutes_validation=None, time_limit_seconds_single_test=30, time_limit_minutes_analysis=3600, halt_on_error=True, rebuild_for_validation=False, asan_options=None, ubsan_options=None, use_ghost_functions=True, acceptable_patch_limit=None)
+2025-02-08 17:17:04.275 | INFO     | scenario:fuzz:463 - skipping fuzzing: fuzzer disabled
+2025-02-08 17:17:04.276 | INFO     | analyzer:run:114 - running analysis with timeout: 60 minutes
+2025-02-08 17:17:04.276 | DEBUG    | analyzer:write_config_to_file:88 - generated analyzer config:
+
+dir_exp:/data/vulnloc/coreutils/gnubug-25003
+tag_id:coreutils_gnubug-25003
+src_directory:/data/vulnloc/coreutils/gnubug-25003/src
+binary_path:/data/vulnloc/coreutils/gnubug-25003/src/src/split
+config_command:exit 0
+build_command:make CFLAGS="-ggdb -fPIC -fPIE ${INJECT_CFLAGS:-}" CXXFLAGS="-ggdb -fPIC -fPIE ${INJECT_CXXFLAGS:-}" LDFLAGS="${INJECT_LDFLAGS:-}" src/split
+test_input_list:-n7/75 /dev/null
+
+klee_flags:--link-llvm-lib=/CrashRepair/lib/libcrepair_proxy.bca 
+
+2025-02-08 17:17:04.276 | DEBUG    | analyzer:run:124 - wrote analyzer config file to: /tmp/tmprkv44y3r
+2025-02-08 17:17:04.276 | DEBUG    | shell:__call__:41 - executing: crepair --conf=/tmp/tmprkv44y3r
+[K[1;36m
+====================================================================================================
+
+	Starting CRepair (C Crash Repair) 
+====================================================================================================
+[0m
+[K[1;36m
+	Loading Configurations
+	__________________________________________________________________________________________
+[0m
+[K	[1;34mreading configuration values from arguments[0m
+[K	[1;34mreading configuration values form configuration file[0m
+[K	[1;37m	[file] /tmp/tmprkv44y3r[0m
+[K	[1;34mupdating configuration values[0m
+[K	[1;34mreading test configuration[0m
+[K	[1;34mreading seed information[0m
+[K	[1;37m	[config] stack size: 15000[0m
+[K	[1;37m	[config] collecting stats: False[0m
+[K	[1;37m	[config] number of tests: 1[0m
+[K	[1;37m	[config] number of cores: 8[0m
+[K	[1;37m	[config] klee concrete execution timeout: 600[0m
+[K	[1;37m	[config] klee concolic execution timeout: 1200[0m
+[K	[1;37m	[config] synthesize subset expressions: True[0m
+[K	[1;37m	[config] window size for taint locations: 500[0m
+[K	[1;37m	[config] window size for taint values: 500000[0m
+[K[1;36m
+
+	Analyzing Program
+====================================================================================================
+[0m
+[K[1;36m
+	Test Case #1
+	__________________________________________________________________________________________
+[0m
+[K[1;36m
+		Running Concrete Execution
+		------------------------------------------------------------------------------------------
+[0m
+[K	[1;37m	[0m[K     [1;37mUsing Arguments: ['-n7/75', '/dev/null'][0m
+[K	[1;37m	[0m[K     [1;37mUsing Input File: None[0m
+[K	[1;34m	building program[0m
+[K	[1;34m		setting environment variables[0m
+[K	[1;34m		cleaning files[0m
+[K	[1;34m		configuring program[0m
+[K	[1;34m		compiling program[0m
+[K	[1;31mcd /data/vulnloc/coreutils/gnubug-25003/src;bear make CFLAGS="-ggdb -fPIC -fPIE ${INJECT_CFLAGS:-}" CXXFLAGS="-ggdb -fPIC -fPIE ${INJECT_CXXFLAGS:-}" LDFLAGS="${INJECT_LDFLAGS:-}" src/split -j `nproc` > /CrashRepair/logs/log-make[0m
+[K	[1;31mAnalysis Failed[0m
+[K	[1;31mBUILD FAILED!!
+Exit Code: 2[0m
+[K	[1;31mRuntime Error[0m
+[K	[1;31mError. Exiting...[0m
+[K	[1;37m
+Run time statistics:
+-----------------------
+[0m
+[K	[1;37mStartup: 0.000 minutes[0m
+[K	[1;37mBuild: 0 minutes[0m
+[K	[1;37mConcrete Analysis: 0 minutes[0m
+[K	[1;37mConcolic Analysis: 0 minutes[0m
+[K	[1;37mTotal Analysis: 0 minutes[0m
+[K	[1;37mLocalization: 0 minutes[0m
+[K	[1;31m
+CRepair exited with an error after 2.240 minutes 
+[0m
+2025-02-08 17:19:19.137 | INFO     | scenario:analyze:425 - analysis failed: analysis failed: no localization file was produced, use location in logs
+No crash location found.
+ERROR: [Errno 2] No such file or directory: '/data/vulnloc/coreutils/gnubug-25003/analysis/localization.json'
+Traceback (most recent call last):
+  File "/orchestrator/crashrepair/cli.py", line 181, in main
+    args.func(args)
+  File "/orchestrator/crashrepair/cli.py", line 22, in do_repair
+    scenario.repair()
+  File "/orchestrator/crashrepair/scenario.py", line 763, in repair
+    report.analysis = AnalysisReport.build(
+  File "/orchestrator/crashrepair/report.py", line 191, in build
+    with open(localization_filename, "r") as fh:
+FileNotFoundError: [Errno 2] No such file or directory: '/data/vulnloc/coreutils/gnubug-25003/analysis/localization.json'
+

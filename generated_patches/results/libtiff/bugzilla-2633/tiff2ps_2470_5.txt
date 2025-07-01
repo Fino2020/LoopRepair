@@ -1,0 +1,54 @@
+@@ -2430,6 +2430,7 @@
+ 	}
+ #define	PUTHEX(c,fd)	putc(hex[((c)>>4)&0xf],fd); putc(hex[(c)&0xf],fd)
+ 
++
+ void
+ PSDataColorContig(FILE* fd, TIFF* tif, uint32 w, uint32 h, int nc)
+ {
+@@ -2449,10 +2450,6 @@
+ 		if (TIFFReadScanline(tif, tf_buf, row, 0) < 0)
+ 			break;
+ 		cp = tf_buf;
+-		/*
+-		 * for 16 bits, the two bytes must be most significant
+-		 * byte first
+-		 */
+ 		if (bitspersample == 16 && !HOST_BIGENDIAN) {
+ 			PS_FlipBytes(cp, tf_bytesperrow);
+ 		}
+@@ -2461,18 +2458,14 @@
+ 			cc = 0;
+ 			for (; cc < tf_bytesperrow; cc += samplesperpixel) {
+ 				DOBREAK(breaklen, nc, fd);
+-				/*
+-				 * For images with alpha, matte against
+-				 * a white background; i.e.
+-				 *    Cback * (1 - Aimage)
+-				 * where Cback = 1.
+-				 */
+-				adjust = 255 - cp[nc];
+-				switch (nc) {
+-				case 4: c = *cp++ + adjust; PUTHEX(c,fd);
+-				case 3: c = *cp++ + adjust; PUTHEX(c,fd);
+-				case 2: c = *cp++ + adjust; PUTHEX(c,fd);
+-				case 1: c = *cp++ + adjust; PUTHEX(c,fd);
++				if (nc < samplesperpixel) {
++					adjust = 255 - cp[nc];
++					switch (nc) {
++					case 4: c = *cp++ + adjust; PUTHEX(c,fd);
++					case 3: c = *cp++ + adjust; PUTHEX(c,fd);
++					case 2: c = *cp++ + adjust; PUTHEX(c,fd);
++					case 1: c = *cp++ + adjust; PUTHEX(c,fd);
++					}
+ 				}
+ 				cp += es;
+ 			}
+@@ -2493,6 +2486,7 @@
+ 	_TIFFfree((char *) tf_buf);
+ }
+ 
++
+ void
+ PSDataColorSeparate(FILE* fd, TIFF* tif, uint32 w, uint32 h, int nc)
+ {
