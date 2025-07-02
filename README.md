@@ -17,7 +17,12 @@ spdlog==v1.12.0
 z3==z3-4.13.4
 pegtl==main
 ```
-please git checkout to the special version of these three project. Otherwise, this dataset project will error.
+please git checkout to the special version of these three project. Otherwise, this dataset project will error. For example:
+```
+git clone https://github.com/gabime/spdlog.git
+cd spdlog # enter the spdlog directory 
+git checkout v1.12.0
+```
 
 Futhermore, the `crepair:aio` image is 23.8GB in size, so please check that the installed image is correct.
 
