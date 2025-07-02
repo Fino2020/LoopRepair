@@ -73,7 +73,7 @@ conda create -n looprepair python=3.9.11
 ___Step 6___: pip install these packages that needed.
 
 ```
-cd /looprepair/crashrepair && pip install -r requirements.txt
+cd /path/to/looprepair && pip install -r requirements.txt
 ```
 
 ___Step 7___: Add OpenAI API key in `LLMRepair.py`.
