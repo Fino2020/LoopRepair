@@ -79,7 +79,7 @@ cd /path/to/looprepair && pip install -r requirements.txt
 ___Step 7___: Add OpenAI API key in `LLMRepair.py`.
 ```
 openai.api_key = ""
-openai.base_url = ''
+openai.base_url = ""
 ```
 
 ___Step 8___: Run repair. *Noting that `copy` the `/data/` directory first using `cp /data/ /data_bak/`, because the original program will be modified if you terminate.*
