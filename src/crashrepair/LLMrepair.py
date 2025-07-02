@@ -224,7 +224,7 @@ def generate_use_llms_from_location(
 		if '\\ No newline at end of file' in patch:
 			patch = patch.replace('\\ No newline at end of file', '')
 		diff = generate_candidates(
-			patch=patch,
+			patch=patch.function,
 			source_file_path=vulnerable_file_path,
 			start_line=start_line,
 			end_line=end_line,
@@ -275,7 +275,7 @@ def generate_use_llms_from_localization_list(
 				if '\\ No newline at end of file' in patch:
 					patch = patch.replace('\\ No newline at end of file', '')
 				diff = generate_candidates(
-					patch,
+					patch.function,
 					vulnerable_file_path,
 					start_line,
 					end_line,
@@ -330,7 +330,7 @@ def generate_use_llms_from_localization_path(
 				if '\\ No newline at end of file' in patch:
 					patch = patch.replace('\\ No newline at end of file', '')
 				diff = generate_candidates(
-					patch,
+					patch.function,
 					vulnerable_file_path,
 					start_line,
 					end_line,
