@@ -91,7 +91,7 @@ ___Step 8___: Run repair. *Noting that `copy` the `/data/` directory first using
     ```
     python run.py
     ```
-3. _After every time you run or terminate the `run.py`, remove `/data/` dataset and replace it using `/data_bak`. This step aim to keep the program the same as original program._
+3. _After every time you run or terminate the `run.py`, remove `/data/` directory and replace it using `/data_bak` directory. This step aim to keep the program the same as original program._
     ```
     rm -rf /data/ 
     cp /data_bak/ /data/
