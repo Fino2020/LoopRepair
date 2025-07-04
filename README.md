@@ -27,6 +27,10 @@ git checkout v1.12.0
 Futhermore, the `crepair:aio` image is 23.8GB in size, so please check that the installed image is correct.
 
 ## Run LoopRepair
+> This project is built in docker enviroment under WSL2 (Specifically Ubuntu 22.04) with Python 3.9.11 (use Anaconda). So, please:
+> > 1. Install Ubuntu 22.04 (I'm not sure whether other Ubuntu version os OK, but this version is suitable) by yourself. 
+> > 2. Install docker under Ubuntu 22.04.
+
 ___Step 1___: Download our looprepair project to `path/to/looprepair`.
 
 ___Step 2___: If you have installed this docker image, use the following code to create the container.
