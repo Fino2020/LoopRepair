@@ -38,7 +38,12 @@ ___Step 1___: Download our looprepair project to `path/to/looprepair`. The `path
 ___Step 2___: If you have installed this docker image, use the following code to create the container. Replacing `path/to/looprepair` using your own directory path.
 
 ```
-docker run --name LoopRepair -v path/to/looprepair/results:/results -v path/to/looprepair/logs:/logs -v path/to/looprepair/src:/looprepair -t crepair:aio
+docker run \
+    --name LoopRepair \
+    -v path/to/looprepair/results:/results \
+    -v path/to/looprepair/logs:/logs \
+    -v path/to/looprepair/src:/looprepair \
+    -t crepair:aio
 ```
 
 ___Step 3___: Use the following code to get into the container.
@@ -63,14 +68,14 @@ ___Step 4___: Install the Anaconda3. wegt the Anaconda3-2024.02-1-Linux-x86_64.s
     ```
 4. _Add these two lines into the ~/.bashrc file._
     ```
-    export PATH="~/anaconda3/bin":$PATH
-    source ~/anaconda3/bin/activate
+    export PATH="/root/anaconda3/bin":$PATH
+    source /root/anaconda3/bin/activate
     ```
 5. _update ~/.bashrc file._
     ```
     source ~/.bashrc
     ```
-5. _Check conda._
+5. _Check whether conda is installed._
     ```
     conda -V
     ```
@@ -84,7 +89,7 @@ conda create -n looprepair python=3.9.11
 ___Step 6___: pip install these packages that needed.
 
 ```
-cd /path/to/looprepair && pip install -r requirements.txt
+cd /looprepair && pip install -r requirements.txt
 ```
 
 ___Step 7___: Add OpenAI API key in `LLMRepair.py`.
