@@ -24,7 +24,7 @@ cd spdlog # enter the spdlog directory
 git checkout v1.12.0
 ```
 
-Futhermore, the `crepair:aio` image is 23.8GB in size, so please check that the installed image is correct.
+Futhermore, the `crepair:aio` image is 24.6GB in size, so please check that the installed image is correct.
 
 ## Run LoopRepair
 > ___Base Environment___:   
