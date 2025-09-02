@@ -35,7 +35,7 @@ Futhermore, the `crepair:aio` image is 24.6GB in size, so please check that the 
 
 ___Step 1___: Download our looprepair project to `path/to/looprepair`. The `path/to/looprepair` is the directory path of your project location, replace it using your own path, the same as following ___Steps___. 
 
-___Step 2___: If you have installed this docker image, use the following code to create the container.
+___Step 2___: If you have installed this docker image, use the following code to create the container. Replacing `path/to/looprepair` using your own directory path.
 
 ```
 docker run --name LoopRepair -v path/to/looprepair/results:/results -v path/to/looprepair/logs:/logs -v path/to/looprepair/src:/looprepair -t crepair:aio
