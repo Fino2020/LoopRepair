@@ -28,7 +28,7 @@ Futhermore, the `crepair:aio` image is 24.6GB in size, so please check that the 
 
 ## Run LoopRepair
 > ___Base Environment___:   
-> &ensp;&ensp;This project is built in docker enviroment under WSL2 (Specifically Ubuntu 22.04) with Python 3.9.11 (use Anaconda). So, please:
+> &ensp;&ensp;This project is built in docker enviroment under WSL2 (Specifically Ubuntu 22.04) with Python 3.9.11 (using Anaconda). So, please:
 > > 1. Install Ubuntu 22.04 (I'm not sure whether other Ubuntu version is OK, but this version is suitable) by yourself. 
 > > 2. Install docker under Ubuntu 22.04.
 
