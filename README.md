@@ -33,7 +33,7 @@ Futhermore, the `crepair:aio` image is 24.6GB in size, so please check that the 
 > > 2. Install docker under Ubuntu 22.04.
 
 
-___Step 1___: Download our looprepair project to `path/to/looprepair`. `path/to/looprepair` is the directory path of your project location, replace it using your own path, the same as following ___Steps___. 
+___Step 1___: Download our looprepair project to `path/to/looprepair`. The `path/to/looprepair` is the directory path of your project location, replace it using your own path, the same as following ___Steps___. 
 
 ___Step 2___: If you have installed this docker image, use the following code to create the container.
 
