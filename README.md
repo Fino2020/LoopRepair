@@ -106,7 +106,7 @@ openai.base_url = ""
 ___Step 8___: Run repair. *Noting that `copy` the `/data/` directory first using `cp /data/ /data_bak/`, because the original program will be modified if you terminate.*
 1. _Noting that `copy` the `/data/` directory first._
     ```
-    cp /data/ /data_bak/
+    cp -r /data/ /data_bak/
     ```
 2. _Run looprepair._
     ```
