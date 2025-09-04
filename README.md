@@ -1,6 +1,11 @@
 ## LoopRepair
 
+This repository shows the source code of papaer 《Well Begun is Half Done: Location-Aware and Trace-Guided Iterative Automated Vulnerability Repair》. 
 LoopRepair improves iterative repair strategies by Location-Aware and Trace-Guided Iterative Automated Vulnerability Repair (AVR).
+
+## Workflow
+
+![Workflow](workflow/Workflow.jpg)
 
 ## Install VulnLoc+ Dataset
 Please go to [CrashRepair](https://github.com/nus-apr/CrashRepair) project to download the docker images. And the original VulnLoc dataset is provided by [VulnLoc](https://github.com/VulnLoc/VulnLoc).
