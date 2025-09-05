@@ -91,10 +91,11 @@ ___Step 5___: Create a vitual environment.
 conda create -n looprepair python=3.9.11
 ```
 
-___Step 6___: pip install these packages that needed.
+___Step 6___: pip install these packages that needed. Add `-i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple some-package` if you need.
 
 ```
-cd /crashrepair && pip install -r requirements.txt
+cd /crashrepair 
+pip install -r requirements.txt
 ```
 
 ___Step 7___: Add OpenAI API key in `LLMRepair.py`.
