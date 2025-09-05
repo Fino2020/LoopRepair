@@ -1,6 +1,6 @@
 ## LoopRepair
 
-This repository shows the source code of paper `Well Begun is Half Done: Location-Aware and Trace-Guided Iterative Automated Vulnerability Repair`. 
+This repository shows the source code of paper `Well Begun is Half Done: Location-Aware and Trace-Guided Iterative Automated Vulnerability Repair`.
 LoopRepair improves iterative repair strategies by Location-Aware and Trace-Guided Iterative Automated Vulnerability Repair (AVR).
 
 ## Workflow
@@ -34,11 +34,11 @@ Futhermore, the `crepair:aio` image is 24.6GB in size, so please check that the 
 ## Run LoopRepair
 > ___Base Environment___:   
 > &ensp;&ensp;This project is built in docker enviroment under WSL2 (Specifically Ubuntu 22.04) with Python 3.9.11 (using Anaconda). So, please:
-> > 1. Install Ubuntu 22.04 (I'm not sure whether other Ubuntu version is OK, but this version is suitable) by yourself. 
+> > 1. Install Ubuntu 22.04 (I'm not sure whether other Ubuntu version is OK, but this version is suitable) by yourself.
 > > 2. Install docker under Ubuntu 22.04.
 
 
-___Step 1___: Download our looprepair project to `path/to/looprepair`. The `path/to/looprepair` is the directory path of your project location, replace it using your own path, the same as following ___Steps___. 
+___Step 1___: Download our looprepair project to `path/to/looprepair`. The `path/to/looprepair` is the directory path of your project location, replace it using your own path, the same as following ___Steps___.
 
 ___Step 2___: If you have installed this docker image, use the following code to create the container. Replacing `path/to/looprepair` using your own directory path.
 
@@ -57,7 +57,7 @@ ___Step 3___: Use the following code to get into the container.
 docker exec -it crepair:aio bash
 ``` 
 
-___Step 4___: Install the Anaconda3. wegt the Anaconda3-2024.02-1-Linux-x86_64.sh by yourself and install Anaconda3. 
+___Step 4___: Install the Anaconda3. wegt the Anaconda3-2024.02-1-Linux-x86_64.sh by yourself and install Anaconda3.
 
 1. _Download Anaconda3._
     ```
@@ -94,7 +94,7 @@ conda create -n looprepair python=3.9.11
 ___Step 6___: pip install these packages that needed.
 
 ```
-cd /looprepair && pip install -r requirements.txt
+cd /crashrepair && pip install -r requirements.txt
 ```
 
 ___Step 7___: Add OpenAI API key in `LLMRepair.py`.
