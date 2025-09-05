@@ -38,7 +38,7 @@ Futhermore, the `crepair:aio` image is 24.6GB in size, so please check that the 
 > > 2. Install docker under Ubuntu 22.04.
 
 
-___Step 1___: Download our looprepair project to `path/to/looprepair`. The `path/to/looprepair` is the directory path of your project location, replace it using your own path, the same as following ___Steps___.
+___Step 1___: Download our LoopRepair project to `path/to/looprepair`. The `path/to/looprepair` is the directory path of your project location, replace it using your own path, the same as following ___Steps___.
 
 ___Step 2___: If you have installed this docker image, use the following code to create the container. Replacing `path/to/looprepair` using your own directory path.
 
@@ -57,7 +57,7 @@ ___Step 3___: Use the following code to get into the container.
 docker exec -it crepair:aio bash
 ``` 
 
-___Step 4___: Install the Anaconda3. wegt the Anaconda3-2024.02-1-Linux-x86_64.sh by yourself and install Anaconda3.
+___Step 4___: Install the Anaconda3. wget the Anaconda3-2024.02-1-Linux-x86_64.sh by yourself and install Anaconda3.
 
 1. _Download Anaconda3._
     ```
@@ -71,7 +71,7 @@ ___Step 4___: Install the Anaconda3. wegt the Anaconda3-2024.02-1-Linux-x86_64.s
     ```
     vim ~/.bashrc
     ```
-4. _Add these two lines into the ~/.bashrc file._
+4. _Add these two lines into the bottom of the `~/.bashrc` file._
     ```
     export PATH="/root/anaconda3/bin":$PATH
     source /root/anaconda3/bin/activate
@@ -80,7 +80,7 @@ ___Step 4___: Install the Anaconda3. wegt the Anaconda3-2024.02-1-Linux-x86_64.s
     ```
     source ~/.bashrc
     ```
-5. _Check whether conda is installed._
+6. _Check whether conda is installed._
     ```
     conda -V
     ```
@@ -98,7 +98,7 @@ cd /crashrepair
 pip install -r requirements.txt
 ```
 
-___Step 7___: Add OpenAI API key in `LLMRepair.py`.
+___Step 7___: Add OpenAI `base_url` and `api_key` in `Lines 16-17` in `LLMRepair.py`.
 ```
 openai.api_key = ""
 openai.base_url = ""
