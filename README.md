@@ -90,7 +90,7 @@ conda activate looprepair
 ___Step 6___: pip install these packages that needed. Add `-i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple some-package` if you need.
 
 ```
-cd crashrepair 
+cd looprepair 
 pip install -r requirements.txt
 ```
 
