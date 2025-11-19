@@ -12,6 +12,7 @@ from tree_sitter import Language, Parser
 import tempfile
 import subprocess
 from pydantic import BaseModel
+from json_repair import repair_json
 
 openai.api_key = "sk-oCkkCqAtYNCnRHxnZpM1sPGq8tu1eSDuLC02uAtaNNLBTqSD"
 openai.base_url = "https://chatapi.onechats.ai/v1/"
@@ -30,19 +31,14 @@ Language.build_library(
 
 C_LANGUAGE = Language('../tree-sitter/build/my-languages.so', 'c')
 
-with open('../prompt/repair_function_ablation.txt', 'r', encoding='utf-8') as f:
+with open('../prompt/repair_function.txt', 'r', encoding='utf-8') as f:
 	repair_function = f.read()
 
-# with open('../prompt/repair_block.txt', 'r', encoding='utf-8') as f:
-#     repair_block = f.read()
-
-with open('../prompt/iterative_function_ablation.txt', 'r', encoding='utf-8') as f:
+with open('../prompt/iterative_function.txt', 'r', encoding='utf-8') as f:
 	iterative_function = f.read()
 
-
-# with open('../prompt/iterative_block.txt', 'r', encoding='utf-8') as f:
-#     iterative_block = f.read()
-
+with open('../prompt/predict_sequence.txt', 'r', encoding='utf-8') as f:
+	predict_sequence = f.read()
 
 def get_function_from_file(
 		file_path,
@@ -118,7 +114,7 @@ def generate_candidates(
 		code = f.read()
 		original_lines = code.split('\n')
 		patch_lines = original_lines[0:start_line] + [first_indent + line for line in
-		                                              patch.split('\n')] + original_lines[end_line + 1:]
+													  patch.split('\n')] + original_lines[end_line + 1:]
 		_, patch_filename = tempfile.mkstemp(suffix=".c")
 		# 将补丁内容写入刚刚创建的临时文件中。
 		with open(patch_filename, "w", encoding='utf-8') as fh:
@@ -143,56 +139,43 @@ def generate_candidates(
 			)
 	return diff_str
 
-
-# def get_sub_block(function, number):
-#     parser = Parser()
-#     parser.set_language(C_LANGUAGE)
-#     tree = parser.parse(bytes(function, 'utf-8'))
-#     root_node = tree.root_node
-#
-#     def get_node(node, line_number):
-#         if node.start_point[0] + 1 <= line_number <= node.end_point[0] + 1:
-#             return node
-#         for child in node.children:
-#             result = get_node(child, line_number)
-#             if result:
-#                 return result
-#         return None
-#
-#     target_node = get_node(root_node, number)
-#     start_line = target_node.start_point[0] + 1
-#     end_line = target_node.end_point[0] + 1
-#     function_lines = function.split('\n')
-#     if target_node and '\n' in function[target_node.start_byte:target_node.end_byte]:
-#         start_line = target_node.start_point[0] + 1
-#         end_line = target_node.end_point[0] + 1
-#         function_lines = function.split('\n')
-#         # 使用一个字符串indent来存储sub_block的第一行的缩进
-#         indent = ' ' * (len(function_lines[start_line - 1]) - len(function_lines[start_line - 1].lstrip()))
-#         # 去除sub_block中每一行的缩进
-#         for i in range(len(function_lines)):
-#             if function_lines[i].startswith(indent):
-#                 function_lines[i] = function_lines[i][len(indent):]
-#
-#         sub_block = '\n'.join(function_lines[start_line - 1:end_line])
-#         return sub_block, start_line, end_line, indent
-#     elif target_node and '\n' not in function[target_node.start_byte:target_node.end_byte]:
-#         parent_node = target_node.parent
-#         start_line = parent_node.start_point[0] + 1
-#         end_line = parent_node.end_point[0] + 1
-#         function_lines = function.split('\n')
-#         # 使用一个字符串indent来存储sub_block的第一行的缩进
-#         indent = ' ' * (len(function_lines[start_line - 1]) - len(function_lines[start_line - 1].lstrip()))
-#         # 去除sub_block中每一行的缩进
-#         for i in range(len(function_lines)):
-#             if function_lines[i].startswith(indent):
-#                 function_lines[i] = function_lines[i][len(indent):]
-#         sub_block = '\n'.join(function_lines[start_line - 1:end_line])
-#         return sub_block, start_line, end_line, indent
-#     # 如果最终没有任何结果，就返回原函数
-#     indent = ' ' * (len(function.split('\n')[0]) - len(function.split('\n')[0].lstrip()))
-#     return function, 1, len(function.split('\n')), indent
-
+def Predict_sequence(
+		function, number, line
+):
+	def ask_llm(question):
+		response = response = client.chat.completions.create(
+			model="gpt-4o-mini",
+			messages=[
+				{ "role": "system", "content": "You are now playing the role of a vulnerability repair expert." },
+				{ "role": "user", "content": question },
+			],
+			response_format={
+				"type":        "json_schema",
+				"json_schema": {
+					"name":   "repair_sequence_generation",
+					"schema": {
+						"type":                 "object",
+						"properties":           {
+							"sequence":    { "type": "string" },
+							"explanation": { "type": "string" }
+						},
+						"required":             ["sequence", "explanation"],
+						"additionalProperties": False
+					},
+					"strict": True
+				}
+			}
+		)
+		text = response.choices[0].message.content
+		json_result = json.loads(repair_json(text))
+		return json_result['sequence']
+	sequence_generate_prompt = predict_sequence.format(
+		function=function,
+		number= str(number),
+		line=line,
+	)
+	sequence = ask_llm(sequence_generate_prompt)
+	return sequence
 
 def generate_use_llms_from_location(
 		id: int,
@@ -271,7 +254,6 @@ def generate_use_llms_from_localization_list(
 					patch = answers[answers.find('```c') + 4:answers.find('```', 2)]
 				else:
 					patch = answers
-				print("patch:{}".format(patch))
 				if '\\ No newline at end of file' in patch:
 					patch = patch.replace('\\ No newline at end of file', '')
 				diff = generate_candidates(
@@ -317,16 +299,15 @@ def generate_use_llms_from_localization_path(
 			prompt = repair_function.format(
 				function=function,
 				line=vulnerable_line,
-				number=line_number - start_line + 1
+				number=line_number - start_line + 1,
+				sequence=Predict_sequence(function=function, number=line_number - start_line + 1, line=vulnerable_line),
 			)
 			for _ in range(5):
 				answers = get_response(prompt)
-				print("answer:{}".format(answers))
 				if '```c' in answers and '```' in answers:
 					patch = answers[answers.find('```c') + 4:answers.find('```', 2)]
 				else:
 					patch = answers
-				print("patch:{}".format(patch))
 				if '\\ No newline at end of file' in patch:
 					patch = patch.replace('\\ No newline at end of file', '')
 				diff = generate_candidates(
@@ -344,10 +325,7 @@ def generate_use_llms_from_localization_path(
 					}
 				)
 				patch_id += 1
-	print("total_candidates:{}".format(total_candidates))
-	with open(output_path, 'w', encoding='utf-8') as f:
-		f.write(json.dumps(total_candidates, ensure_ascii=False, indent=4))
+	logger.info("total_candidates:{}".format(total_candidates))
+	with open(output_path, 'w', encoding='utf-8') as f_write:
+		f_write.write(json.dumps(total_candidates, ensure_ascii=False, indent=4))
 
-# if __name__ == '__main__':
-#     file_path = './localization.json'
-#     generate_use_llms(file_path, "./candidate.json")

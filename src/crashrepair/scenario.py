@@ -132,6 +132,7 @@ class Scenario:
 	use_ghost_functions: bool = attrs.field(default=False)
 	acceptable_patch_limit: t.Optional[int] = attrs.field(default=None)
 	time_limit_minutes_iterative: int = attrs.field(default=60 * 3)
+	vulnerability_type: str = attrs.field(default="")
 	
 	@property
 	def compile_commands_path(
@@ -488,7 +489,11 @@ class Scenario:
 		# self.rebuild()
 		# assumes that bear has produced a compilation database previously
 		assert os.path.exists(self.compile_commands_path)
-		
+		# 记录初始漏洞类型
+		if os.path.exists(self.analysis_path):
+				with open(self.analysis_path, 'r', encoding='utf-8') as f:
+					analysis_json = json.loads(f.read())
+					self.vulnerability_type = analysis_json['analysis_output'][0]['bug_type']
 		# extract a list of implicated source files
 		implicated_files = self._determine_implicated_files()
 		logger.info(f"generating candidate repairs in implicated files: {implicated_files}")
@@ -918,6 +923,9 @@ class Scenario:
 			with open(self.patch_iterative_path, 'w', encoding='utf-8') as f:
 				f.write(json.dumps(iterative_json, ensure_ascii=False, indent=4))
 			return
+		# 如果某个补丁的vulnerability_type与原始补丁不一致，直接删除
+		if analysis_for_guide['vulnerability_type'] != self.vulnerability_type:
+			iterative_json[analysis_for_guide['patch_id']] = {}
 		# 对analysis_for_guide['candidates']中的每个元素，按照元素中的impact_lines字段的数字大小进行降序排序，在排序的时候删除impact_lines为0的元素
 		# 如果所有补丁的impact_lines都为0，那么就随机选择5个补丁进行分析
 		if len([i for i in analysis_for_guide['candidates'] if i['impact_lines'] != 0.0]) == 0:

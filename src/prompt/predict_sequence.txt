@@ -1,0 +1,114 @@
+// Generate a repair sequence for the vulnerable function
+
+// Vulnerable Function
+1   int readextension(void)
+2   {{
+3       int count;
+4       char buf[255];
+5       int status = 1;
+6       (void) getc(infile);
+7       while ((count = getc(infile)) && count <= 255)
+8       {{
+9           assert(count >= 0);
+10          if (fread(buf, 1, count, infile) != (size_t) count) {{
+11              fprintf(stderr, "short read from file %s (%s)\n",
+12                      filename, strerror(errno));
+13              status = 0;
+14              break;
+15          }}
+16      }}
+17      return status;
+18  }}
+
+// Ground-Truth Patch (Line number is corresponding with the vulnerable version, + represents here need to add a code block, - represents here need to remove a line)
+1   int readextension(void)
+2   {{
+3       int count;
+4       char buf[255];
+5       int status = 1;
+    +   if (infile == NULL) {{
+    +     fprintf(stderr, "Input file is not open.\n");
+    +     return 0;
+    +   }}
+6       (void) getc(infile);
+7   -   while ((count = getc(infile)) && count <= 255)
+    +   while ((count = getc(infile)) != EOF && count <= 255)
+8       {{
+9           assert(count >= 0);
+10          if (fread(buf, 1, count, infile) != (size_t) count) {{
+11              fprintf(stderr, "short read from file %s (%s)\n",
+12                      filename, strerror(errno));
+13              status = 0;
+14              break;
+15          }}
+16      }}
+17      return status;
+18  }}
+
+Let's think step by step.
+Step 1 - The detected vulnerable hunk is in Line 6 ((void) getc(infile);).
+Step 2 - In order to repair this vulnerability, you need to add an if-block between Line 5 and Line 6, then remove Line 7 and add a new correct while-condition in Line 7.
+Step 3 - Please generate the sequence that represents the where need to remove and where need to add, where [ADD] token indicates potential patch hunk locations within the function and [7] means to repair this vulnerability, we need to remove Line 7.
+
+// Sequence
+{{1,2,3,4,5,[ADD],6,[7],[ADD],8,9,10,11,12,13,14,15,16,17,18}}
+
+// Generate a repair sequence for the vulnerable function
+
+// Vulnerable Function
+1   static int atusb_get_and_show_build(struct atusb *atusb) {{
+2     struct usb_device *usb_dev = atusb->usb_dev;
+3     char build[ATUSB_BUILD_SIZE + 1];
+4     int ret;
+5     ret = atusb_control_msg(atusb, usb_rcvctrlpine(usb_dev,0)
+                      ATUSB_BUILD, ATUSB_REQ_FROM_DEV, 0, 0
+                      build, ATUSB_BUILD_SIZE, 1000);
+6     if (ret >= 0){{
+7       build[ret] = 0;
+8       dev_info(&usb_dev->dev, “Firware:build %s\n”,build);
+9     }}
+10    return ret;
+11  }}
+
+// Ground-Truth Patch Diff (Line number is corresponding with the vulnerable version, + represents here need to add a code block, - represents here need to remove a line)
+1   static int atusb_get_and_show_build(struct atusb *atusb) {{
+2     struct usb_device *usb_dev = atusb->usb_dev;
+3 -   char build[ATUSB_BUILD_SIZE + 1];
+  +   char *build;
+4     int ret;
+  +   build = kmalloc(ATUSB_BUILD_SIZE + 1, GFP_KERNAL);
+  +   if (!build)
+  +     return -ENOMEM;
+5     ret = atusb_control_msg(atusb, usb_rcvctrlpine(usb_dev,0)
+                      ATUSB_BUILD, ATUSB_REQ_FROM_DEV, 0, 0
+                      build, ATUSB_BUILD_SIZE, 1000);
+6     if (ret >= 0){{
+7       build[ret] = 0;
+8       dev_info(&usb_dev->dev, “Firware:build %s\n”,build);
+9     }}
+  +    kfree(build);
+10    return ret;
+11  }}
+
+Let's think step by step.
+Step 1 - The detected vulnerable hunk is in Line 3 (char build[ATUSB_BUILD_SIZE + 1];).
+Step 2 - In order to repair this vulnerability, you need to replace the build array using kmalloc and check whether it is NULL between Line 4 and Line 5, then add the kfree operation between Line 9 and Line 10.
+Step 3 - Please generate the sequence that represents the where need to remove and where need to add, where [ADD] token indicates potential patch hunk locations within the function and [7] means to repair this vulnerability, we need to remove Line 7.
+
+// Sequence
+{{1,2,[3],[ADD],4,[ADD],5,6,7,8,9,[ADD],10,11}}
+
+// Generate a repair sequence for the vulnerable function
+
+// Vulnerable Function
+{function}
+
+// Ground-Truth Patch Diff (Line number is corresponding with the vulnerable version, + represents here need to add a code block, - represents here need to remove a line)
+Please consider a repair patch diff by yourself.
+
+Let's think step by step.
+Step 1: The detected vulnerable line that triggerred the vulnerability is {line} in line {number}.
+Step 2: In order to repair this vulnerability, you need to consider how to repair this vulnerability is best.
+Step 3 - Please generate the sequence that represents the where need to remove and where need to add, where [ADD] token indicates potential patch hunk locations within the function and [X] means to repair this vulnerability, we need to remove Line X. It is worth noting that X is a placeholder that should be replaced with the specific line number.
+
+// Sequence

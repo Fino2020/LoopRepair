@@ -14,14 +14,14 @@ from loguru import logger
 from location import Location
 from tree_sitter import Language, Parser
 from typing import Tuple
-import torch
-import torch.nn.functional as F
-from transformers import RobertaTokenizer, RobertaConfig, RobertaModel
+# import torch
+# import torch.nn.functional as F
+# from transformers import RobertaTokenizer, RobertaConfig, RobertaModel
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-tokenizer = RobertaTokenizer.from_pretrained("../codebert-base")
-model = RobertaModel.from_pretrained("../codebert-base")
-model.to(device)
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# tokenizer = RobertaTokenizer.from_pretrained("../codebert-base")
+# model = RobertaModel.from_pretrained("../codebert-base")
+# model.to(device)
 if t.TYPE_CHECKING:
     from test import Test, TestOutcome
 
@@ -372,106 +372,106 @@ class PatchCandidate:
             os.remove(patch_filename)
         logger.trace("reverted candidate patch")
 
-    # 用于计算AST差异
-    def _extract_functions_from_diff(
-            self
-            ) -> Tuple[str, str]:
-        original_lines = []
-        modified_lines = []
-        in_hunk = False
+    # # 用于计算AST差异
+    # def _extract_functions_from_diff(
+    #         self
+    #         ) -> Tuple[str, str]:
+    #     original_lines = []
+    #     modified_lines = []
+    #     in_hunk = False
+    #
+    #     for line in self.diff.split('\n'):
+    #         if line.startswith('@@'):
+    #             in_hunk = True
+    #             continue
+    #         if not in_hunk:
+    #             continue
+    #         if line.startswith('-'):
+    #             original_lines.append(line[1:])
+    #         elif line.startswith('+'):
+    #             modified_lines.append(line[1:])
+    #         elif line.startswith(' '):
+    #             original_lines.append(line[1:])
+    #             modified_lines.append(line[1:])
+    #
+    #     return '\n'.join(original_lines), '\n'.join(modified_lines)
+    #
+    # def _parse_to_ast(
+    #         self,
+    #         code: str
+    #         ):
+    #     try:
+    #         tree = parser.parse(bytes(code, "utf8"))
+    #         return tree.root_node
+    #     except Exception as e:
+    #         print(f"解析失败: {e}")
+    #         return None
+    #
+    # def _calculate_ast_diff(
+    #         self,
+    #         ast1,
+    #         ast2
+    #         ) -> int:
+    #     if ast1 is None or ast2 is None:
+    #         return -1
+    #
+    #     def count_diff(
+    #             node1,
+    #             node2
+    #             ):
+    #         if node1.type != node2.type:
+    #             return 1
+    #         if node1.type in ('identifier', 'number_literal', 'string_literal'):
+    #             if node1.text != node2.text:
+    #                 return 1
+    #         diff = 0
+    #         children1 = list(node1.children)
+    #         children2 = list(node2.children)
+    #         if len(children1) != len(children2):
+    #             diff += abs(len(children1) - len(children2))
+    #         for c1, c2 in zip(children1, children2):
+    #             diff += count_diff(c1, c2)
+    #         return diff
+    #
+    #     return count_diff(ast1, ast2)
+    #
+    # def calculate_AST_difference(
+    #         self
+    #         ) -> int:
+    #     original_code, modified_code = self._extract_functions_from_diff()
+    #     ast1 = self._parse_to_ast(original_code)
+    #     ast2 = self._parse_to_ast(modified_code)
+    #     return self._calculate_ast_diff(ast1, ast2)
 
-        for line in self.diff.split('\n'):
-            if line.startswith('@@'):
-                in_hunk = True
-                continue
-            if not in_hunk:
-                continue
-            if line.startswith('-'):
-                original_lines.append(line[1:])
-            elif line.startswith('+'):
-                modified_lines.append(line[1:])
-            elif line.startswith(' '):
-                original_lines.append(line[1:])
-                modified_lines.append(line[1:])
-
-        return '\n'.join(original_lines), '\n'.join(modified_lines)
-
-    def _parse_to_ast(
-            self,
-            code: str
-            ):
-        try:
-            tree = parser.parse(bytes(code, "utf8"))
-            return tree.root_node
-        except Exception as e:
-            print(f"解析失败: {e}")
-            return None
-
-    def _calculate_ast_diff(
-            self,
-            ast1,
-            ast2
-            ) -> int:
-        if ast1 is None or ast2 is None:
-            return -1
-
-        def count_diff(
-                node1,
-                node2
-                ):
-            if node1.type != node2.type:
-                return 1
-            if node1.type in ('identifier', 'number_literal', 'string_literal'):
-                if node1.text != node2.text:
-                    return 1
-            diff = 0
-            children1 = list(node1.children)
-            children2 = list(node2.children)
-            if len(children1) != len(children2):
-                diff += abs(len(children1) - len(children2))
-            for c1, c2 in zip(children1, children2):
-                diff += count_diff(c1, c2)
-            return diff
-
-        return count_diff(ast1, ast2)
-
-    def calculate_AST_difference(
-            self
-            ) -> int:
-        original_code, modified_code = self._extract_functions_from_diff()
-        ast1 = self._parse_to_ast(original_code)
-        ast2 = self._parse_to_ast(modified_code)
-        return self._calculate_ast_diff(ast1, ast2)
-
-    def calculate_cosine_similarity(
-            self
-            ) -> float:
-        original_code, modified_code = self._extract_functions_from_diff()
-        word_embedding_original = self._get_embedding_codebert(original_code)
-        word_embedding_modified = self._get_embedding_codebert(modified_code)
-
-        # 计算两个向量的余弦相似度
-        def cosine_similarity(
-                emb1,
-                emb2
-                ):
-            # emb1, emb2: torch.Size([1, seq_len, hidden_size])
-            emb1 = emb1.squeeze(0).mean(dim=0)  # [hidden_size]
-            emb2 = emb2.squeeze(0).mean(dim=0)  # [hidden_size]
-            sim = F.cosine_similarity(emb1, emb2, dim=0)
-            return sim.item()
-
-        return cosine_similarity(
-            torch.tensor(word_embedding_original).to(device),
-            torch.tensor(word_embedding_modified).to(device)
-            )
-
-    def _get_embedding_codebert(
-            self,
-            code: str
-            ) -> t.List[t.List[float]]:
-        code_tokens = tokenizer.tokenize(code)
-        tokens_ids = tokenizer.convert_tokens_to_ids(code_tokens)
-        context_embeddings = model(torch.tensor(tokens_ids)[None, :])[0]
-        # torch.Size([1, 23, 768])类型
-        return context_embeddings
+    # def calculate_cosine_similarity(
+    #         self
+    #         ) -> float:
+    #     original_code, modified_code = self._extract_functions_from_diff()
+    #     word_embedding_original = self._get_embedding_codebert(original_code)
+    #     word_embedding_modified = self._get_embedding_codebert(modified_code)
+    #
+    #     # 计算两个向量的余弦相似度
+    #     def cosine_similarity(
+    #             emb1,
+    #             emb2
+    #             ):
+    #         # emb1, emb2: torch.Size([1, seq_len, hidden_size])
+    #         emb1 = emb1.squeeze(0).mean(dim=0)  # [hidden_size]
+    #         emb2 = emb2.squeeze(0).mean(dim=0)  # [hidden_size]
+    #         sim = F.cosine_similarity(emb1, emb2, dim=0)
+    #         return sim.item()
+    #
+    #     return cosine_similarity(
+    #         torch.tensor(word_embedding_original).to(device),
+    #         torch.tensor(word_embedding_modified).to(device)
+    #         )
+    #
+    # def _get_embedding_codebert(
+    #         self,
+    #         code: str
+    #         ) -> t.List[t.List[float]]:
+    #     code_tokens = tokenizer.tokenize(code)
+    #     tokens_ids = tokenizer.convert_tokens_to_ids(code_tokens)
+    #     context_embeddings = model(torch.tensor(tokens_ids)[None, :])[0]
+    #     # torch.Size([1, 23, 768])类型
+    #     return context_embeddings

@@ -8,7 +8,10 @@
          QDesktopServices::openUrl(_OCUrl);
   }}
 
-Let's think step by step. The vulnerable location is in the call of the "QDesktopServices::openUrl". The line is currently: QDesktopServices::openUrl(_OCUrl);.
+Let's think step by step.
+Step 1 - The vulnerable hunk within vulnerable function is QDesktopServices::openUrl(_OCUrl);.
+Step 2 - The patch hunk that need to be repaired is QDesktopServices::openUrl(_OCUrl);.
+Step 3 - Please generate the corresponding patched function.
 
 // Fixed Function
   void AccountSettings::slotOpenOC()
@@ -31,6 +34,9 @@ Let's think step by step. The vulnerable location is in the call of the "QDeskto
   }}
 
 Let's think step by step. The vulnerable location is inside the "while-loop". The line is currently: a = EXP2(BITOR, a, bitxor(J, notin));. The stack overflow occurs because the depth of the AST is not being maintained correctly within the while loop. Specifically, when the parser encounters multiple consecutive | operators, it results in excessive recursive calls, ultimately leading to a stack overflow.
+Step 1 - The vulnerable hunk within vulnerable function is a = EXP2(BITOR, a, bitxor(J, notin));.
+Step 2 - The patch hunk that needs to be repaired is a = EXP2(BITOR, a, bitxor(J, notin));.
+Step 3 - Please generate the corresponding patched function.
 
 // Fixed Function
   static js_Ast *bitor(js_State *J, int notin)
@@ -51,6 +57,9 @@ Let's think step by step. The vulnerable location is inside the "while-loop". Th
 // Vulnerable Function
 {function}
 
-Let's think step by step. The vulnerable line that triggerred the vulnerability is {line} in line {number}.
-Step 1 - Let's predict the positions of the statements that need to be modified based on the vulnerable line that triggered the vulnerability. fixing location may not be same as the vulnerable location.
-Step 2 - Let's generate the patch function of the provided vulnerable function according to the vulnerable function and the positions that need to be modified in the first step. Please note that only the function is required (Do not omit any unchanged statements in the output patch; it is essential to maintain the integrity of functions.), without the need for header files or other functions and any textual explanations.
+Let's think step by step.
+Step 1: The vulnerable line that triggerred the vulnerability is {line} in line {number}.
+Step 2: The patch hunks that need to be repaired are shown as sequence {sequence}. The sequence can serve as a reference, where [ADD] token indicates potential patch hunk locations within the function and [X] means to repair this vulnerability, we need to remove Line X. If you do not agree with this repair method, follow your heart.
+Step 3: Please generate the corresponding patched function.
+
+// Fixed Function
