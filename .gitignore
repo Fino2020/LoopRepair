@@ -4,3 +4,4 @@ src/test
 logs
 results
 src\crashrepair\__pycache__
+.gitignore
