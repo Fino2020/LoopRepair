@@ -14,8 +14,8 @@ import subprocess
 from pydantic import BaseModel
 from json_repair import repair_json
 
-openai.api_key = "sk-oCkkCqAtYNCnRHxnZpM1sPGq8tu1eSDuLC02uAtaNNLBTqSD"
-openai.base_url = "https://chatapi.onechats.ai/v1/"
+openai.api_key = ""
+openai.base_url = ""
 client = OpenAI(api_key=openai.api_key, base_url=openai.base_url)
 
 Language.build_library(
