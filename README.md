@@ -43,12 +43,7 @@ ___Step 1___: Download our LoopRepair project to `path/to/looprepair`. The `path
 ___Step 2___: If you have installed this docker image, use the following code to create the container. Replacing `path/to/looprepair` using your own directory path.
 
 ```
-docker run \
-    --name LoopRepair \
-    -v path/to/looprepair/results:/results \
-    -v path/to/looprepair/logs:/logs \
-    -v path/to/looprepair/src:/looprepair \
-    -t crepair:aio
+docker run  --name LoopRepair  -v path/to/looprepair/results:/results   -v path/to/looprepair/logs:/logs -v path/to/looprepair/src:/looprepair -t crepair:aio
 ```
 
 ___Step 3___: Use the following code to get into the container.
@@ -89,12 +84,13 @@ ___Step 5___: Create a vitual environment.
 
 ```
 conda create -n looprepair python=3.9.11
+conda activate looprepair
 ```
 
 ___Step 6___: pip install these packages that needed. Add `-i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple some-package` if you need.
 
 ```
-cd /crashrepair 
+cd crashrepair 
 pip install -r requirements.txt
 ```
 
