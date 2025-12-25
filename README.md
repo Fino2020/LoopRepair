@@ -30,6 +30,7 @@ git checkout v1.12.0
 ```
 
 Futhermore, the `crepair:aio` image is 24.6GB in size, so please check that the installed image is correct.
+The docker image is available at [Office OneDrive](https://yzu365-my.sharepoint.cn/:u:/g/personal/dx120240105_365_yzu_edu_cn/IQBn1n44IZn-TLQ3LdL42lgQAelR3-rGDk9bqgfeQNOVRr4?e=GZlzNp).
 
 ## Run LoopRepair
 > ___Base Environment___:   
