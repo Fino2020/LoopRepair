@@ -7,30 +7,25 @@ import os
 import subprocess
 
 # 所有漏洞
-dict_project_vul_id = {
-	'libtiff': ['bugzilla-2633', 'REDTEAM-CVE-2016-10268', 'CVE-2017-7595', 'CVE-2016-3186',
-                'CVE-2016-10272', 'CVE-2016-5321', 'CVE-2016-9532', 'CVE-2016-10094',
-                'REDTEAM-CVE-2022-48281', 'REDTEAM-CVE-2022-4645', 'REDTEAM-CVE-2017-17095',
-                'bugzilla-2611', 'CVE-2016-10092', 'CVE-2016-9273', 'CVE-2017-7601', 'CVE-2017-5225',
-                'REDTEAM-CVE-2018-18557', 'CVE-2016-5314', 'CVE-2017-7600', 'CVE-2017-7599'],
-    'libjpeg': ['CVE-2012-2806', 'CVE-2017-15232', 'CVE-2018-19664', 'CVE-2018-14498'],
-    'potrace': ['CVE-2013-7437'],
-    'libxml2': ['REDTEAM-CVE-2016-1833', 'CVE-2016-1839', 'CVE-2012-5134', 'REDTEAM-CVE-2021-3516',
-                'CVE-2016-1838', 'REDTEAM-CVE-2022-40303', 'CVE-2017-5969'],
-    'binutils': ['CVE-2017-15025', 'REDTEAM-CVE-2021-43149', 'REDTEAM-CVE-2021-20294',
-                 'CVE-2017-6965', 'CVE-2017-14745', 'CVE-2017-15020'],
-    'libming': ['CVE-2018-8964', 'CVE-2018-8806', 'CVE-2016-9264'],
-    'jasper': ['REDTEAM-CVE-2021-3272', 'REDTEAM-CVE-2020-27828', 'CVE-2016-8691', 'CVE-2016-9557'],
-    'coreutils': ['gnubug-19784', 'gnubug-26545', 'gnubug-25003', 'gnubug-25023'],
-    'zziplib': ['CVE-2017-5976', 'CVE-2017-5974', 'CVE-2017-5975'],
-    # 'libtiff': ['bugzilla-2633', 'REDTEAM-CVE-2016-10268', 'CVE-2017-7595', 'CVE-2016-3186',
-    #             'CVE-2016-10272', 'CVE-2016-5321', 'CVE-2016-9532', 'CVE-2016-10094',
-    #             'REDTEAM-CVE-2022-48281', 'REDTEAM-CVE-2022-4645', 'REDTEAM-CVE-2017-17095',
-    #             'bugzilla-2611', 'CVE-2016-10092', 'CVE-2016-9273', 'CVE-2017-7601', 'CVE-2017-5225',
-    #             'REDTEAM-CVE-2018-18557', 'CVE-2016-5314', 'CVE-2017-7600', 'CVE-2017-7599'],
-    'libarchive': ['CVE-2016-5844']
-}
-
+# dict_project_vul_id = {
+# 	'libtiff': ['bugzilla-2633', 'REDTEAM-CVE-2016-10268', 'CVE-2017-7595', 'CVE-2016-3186',
+#                 'CVE-2016-10272', 'CVE-2016-5321', 'CVE-2016-9532', 'CVE-2016-10094',
+#                 'REDTEAM-CVE-2022-48281', 'REDTEAM-CVE-2022-4645', 'REDTEAM-CVE-2017-17095',
+#                 'bugzilla-2611', 'CVE-2016-10092', 'CVE-2016-9273', 'CVE-2017-7601', 'CVE-2017-5225',
+#                 'REDTEAM-CVE-2018-18557', 'CVE-2016-5314', 'CVE-2017-7600', 'CVE-2017-7599'],
+#     'libjpeg': ['CVE-2012-2806', 'CVE-2017-15232', 'CVE-2018-19664', 'CVE-2018-14498'],
+#     'potrace': ['CVE-2013-7437'],
+#     'libxml2': ['REDTEAM-CVE-2016-1833', 'CVE-2016-1839', 'CVE-2012-5134', 'REDTEAM-CVE-2021-3516',
+#                 'CVE-2016-1838', 'REDTEAM-CVE-2022-40303', 'CVE-2017-5969'],
+#     'binutils': ['CVE-2017-15025', 'REDTEAM-CVE-2021-43149', 'REDTEAM-CVE-2021-20294',
+#                  'CVE-2017-6965', 'CVE-2017-14745', 'CVE-2017-15020'],
+#     'libming': ['CVE-2018-8964', 'CVE-2018-8806', 'CVE-2016-9264'],
+#     'jasper': ['REDTEAM-CVE-2021-3272', 'REDTEAM-CVE-2020-27828', 'CVE-2016-8691', 'CVE-2016-9557'],
+#     'coreutils': ['gnubug-19784', 'gnubug-26545', 'gnubug-25003', 'gnubug-25023'],
+#     'zziplib': ['CVE-2017-5976', 'CVE-2017-5974', 'CVE-2017-5975'],
+#     'libarchive': ['CVE-2016-5844']
+# }
+dict_project_vul_id = {'binutils': ['CVE-2017-14745']}
 # if os.path.exists('/data_bak/'):
 # 	print('Returning back to the original data directory')
 # 	subprocess.call('rm -rf /data/', shell=True)

@@ -11,13 +11,12 @@ from openai import OpenAI
 from tree_sitter import Language, Parser
 import tempfile
 import subprocess
-from pydantic import BaseModel
 from json_repair import repair_json
 
-openai.api_key = ""
-openai.base_url = ""
+openai.api_key = "sk-oCkkCqAtYNCnRHxnZpM1sPGq8tu1eSDuLC02uAtaNNLBTqSD"
+openai.base_url = "https://chatapi.onechats.top/v1/"
 client = OpenAI(api_key=openai.api_key, base_url=openai.base_url)
-
+api_model = "gpt-4o-mini"
 Language.build_library(
 	
 	# Store the library in the `build` directory
@@ -84,23 +83,39 @@ def get_function_from_file(
 		return None
 
 
-class PatchFunction(BaseModel):
-	function: str
-
-
-def get_response(
+def patch_generation(
 		question
 ):
-	response = client.beta.chat.completions.parse(
-		model="gpt-4o-mini",
-		messages=[
-			{ "role": "system", "content": "You are now playing the role of a vulnerability repair expert." },
-			{ "role": "user", "content": question },
-		],
-		response_format=PatchFunction
-	)
-	text = response.choices[0].message.parsed
-	return text
+	try:
+		response = client.chat.completions.create(
+			model=api_model,
+			messages=[
+				{ "role": "system", "content": "You are now playing the role of a vulnerability repair expert." },
+				{ "role": "user", "content": question },
+			],
+			response_format={
+				"type":        "json_schema",
+				"json_schema": {
+					"name":   "patch_function_generation",
+					"schema": {
+						"type":                 "object",
+						"properties":           {
+							"patch_function":    { "type": "string" },
+							"explanation": { "type": "string" }
+						},
+						"required":             ["patch_function", "explanation"],
+						"additionalProperties": False
+					},
+					"strict": True
+				}
+			}
+		)
+		text = response.choices[0].message.content
+		json_result = json.loads(repair_json(text))
+		return json_result['patch_function']
+	except Exception as e:
+		logger.error(f"The LLM returned an error. Error: {e}. Prompt:{question}")
+
 
 
 def generate_candidates(
@@ -143,8 +158,8 @@ def Predict_sequence(
 		function, number, line
 ):
 	def ask_llm(question):
-		response = response = client.chat.completions.create(
-			model="gpt-4o-mini",
+		response = client.chat.completions.create(
+			model=api_model,
 			messages=[
 				{ "role": "system", "content": "You are now playing the role of a vulnerability repair expert." },
 				{ "role": "user", "content": question },
@@ -199,15 +214,9 @@ def generate_use_llms_from_location(
 			line=vulnerable_line,
 			number=line_number - start_line + 1
 		)
-		answers = get_response(prompt)
-		if '```c' in answers and '```' in answers:
-			patch = answers[answers.find('```c') + 4:answers.find('```', 2)]
-		else:
-			patch = answers
-		if '\\ No newline at end of file' in patch:
-			patch = patch.replace('\\ No newline at end of file', '')
+		patch_function = patch_generation(prompt)
 		diff = generate_candidates(
-			patch=patch.function,
+			patch=patch_function,
 			source_file_path=vulnerable_file_path,
 			start_line=start_line,
 			end_line=end_line,
@@ -246,18 +255,13 @@ def generate_use_llms_from_localization_list(
 				line=vulnerable_line,
 				vulnerability_type=vulnerability_type,
 				crash_free_constrain=crash_free_constrain,
-				number=line_number - start_line + 1
+				number=line_number - start_line + 1,
+				sequence=Predict_sequence(function=function, number=line_number - start_line + 1, line=vulnerable_line),
 			)
 			for _ in range(5):
-				answers = get_response(prompt)
-				if '```c' in answers and '```' in answers:
-					patch = answers[answers.find('```c') + 4:answers.find('```', 2)]
-				else:
-					patch = answers
-				if '\\ No newline at end of file' in patch:
-					patch = patch.replace('\\ No newline at end of file', '')
+				patch_function = patch_generation(prompt)
 				diff = generate_candidates(
-					patch.function,
+					patch_function,
 					vulnerable_file_path,
 					start_line,
 					end_line,
@@ -303,15 +307,9 @@ def generate_use_llms_from_localization_path(
 				sequence=Predict_sequence(function=function, number=line_number - start_line + 1, line=vulnerable_line),
 			)
 			for _ in range(5):
-				answers = get_response(prompt)
-				if '```c' in answers and '```' in answers:
-					patch = answers[answers.find('```c') + 4:answers.find('```', 2)]
-				else:
-					patch = answers
-				if '\\ No newline at end of file' in patch:
-					patch = patch.replace('\\ No newline at end of file', '')
+				patch_function = patch_generation(prompt)
 				diff = generate_candidates(
-					patch.function,
+					patch_function,
 					vulnerable_file_path,
 					start_line,
 					end_line,

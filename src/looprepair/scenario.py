@@ -16,7 +16,7 @@ from analyzer import Analyzer
 from candidate import PatchCandidate, PatchEvaluation, AnalyzeCandidate
 from exceptions import CrashRepairException, AnalyzerTimedOut, AnalyzerCrashed
 from fuzzer import Fuzzer, FuzzerConfig
-from LLMrepair import generate_use_llms_from_localization_path, generate_use_llms_from_localization_list
+from LLMRepair import generate_use_llms_from_localization_path, generate_use_llms_from_localization_list
 from report import (
 	AnalysisReport,
 	FuzzerReport,
@@ -924,8 +924,11 @@ class Scenario:
 				f.write(json.dumps(iterative_json, ensure_ascii=False, indent=4))
 			return
 		# 如果某个补丁的vulnerability_type与原始补丁不一致，直接删除
-		if analysis_for_guide['vulnerability_type'] != self.vulnerability_type:
-			iterative_json[analysis_for_guide['patch_id']] = {}
+		for candidate in analysis_for_guide['candidates']:
+			if candidate['vulnerability_type'] != "" and candidate['vulnerability_type']!= self.vulnerability_type:
+				analysis_for_guide['candidates'].remove(candidate)
+		# if analysis_for_guide['candidates']['vulnerability_type'] != self.vulnerability_type:
+		# 	iterative_json[analysis_for_guide['patch_id']] = {}
 		# 对analysis_for_guide['candidates']中的每个元素，按照元素中的impact_lines字段的数字大小进行降序排序，在排序的时候删除impact_lines为0的元素
 		# 如果所有补丁的impact_lines都为0，那么就随机选择5个补丁进行分析
 		if len([i for i in analysis_for_guide['candidates'] if i['impact_lines'] != 0.0]) == 0:

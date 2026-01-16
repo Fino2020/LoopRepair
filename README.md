@@ -60,9 +60,9 @@ ___Step 4___: Install the Anaconda3. wget the Anaconda3-2024.02-1-Linux-x86_64.s
     ```
     wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/Anaconda3-2024.02-1-Linux-x86_64.sh
     ```
-2. _Install Anaconda3._
+2. _Install Anaconda3 and skip the documentation._
     ```
-    ./Anaconda3-2024.02-1-Linux-x86_64.sh
+    bash Anaconda3-2024.02-1-Linux-x86_64.sh -b -p $HOME/anaconda3
     ```
 3. _Add the Anaconda environment variable._
     ```
@@ -93,7 +93,7 @@ ___Step 6___: pip install these packages that needed. Add `-i https://mirrors.tu
 
 ```
 cd looprepair 
-pip install -r requirements.txt
+pip install -r requirements.txt -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple some-package
 ```
 
 ___Step 7___: Add OpenAI `base_url` and `api_key` in `Lines 16-17` in `LLMRepair.py`.

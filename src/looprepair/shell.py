@@ -38,7 +38,7 @@ class Shell:
             additional_args["stderr"] = subprocess.PIPE
             additional_args["universal_newlines"] = "\n"
 
-        logger.debug(f"executing: {command}")
+        # logger.debug(f"executing: {command}")
         try:
             result = subprocess.run(
                 command,

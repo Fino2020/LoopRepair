@@ -1,0 +1,6 @@
+.gitignore
+.idea
+logs
+results
+src/Anaconda3-2024.02-1-Linux-x86_64.sh
+src/looprepair/__pycache__
