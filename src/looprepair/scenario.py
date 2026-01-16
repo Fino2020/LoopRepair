@@ -16,7 +16,10 @@ from analyzer import Analyzer
 from candidate import PatchCandidate, PatchEvaluation, AnalyzeCandidate
 from exceptions import CrashRepairException, AnalyzerTimedOut, AnalyzerCrashed
 from fuzzer import Fuzzer, FuzzerConfig
-from LLMRepair import generate_use_llms_from_localization_path, generate_use_llms_from_localization_list
+from LLMRepair import (
+	generate_use_llms_from_localization_path,
+	generate_use_llms_from_localization_list
+)
 from report import (
 	AnalysisReport,
 	FuzzerReport,

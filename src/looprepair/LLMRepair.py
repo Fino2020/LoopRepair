@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
-import difflib
 import json
 import os
-import sys
-import typing
-import re
 from loguru import logger
 import openai
 from openai import OpenAI
@@ -13,10 +9,11 @@ import tempfile
 import subprocess
 from json_repair import repair_json
 
-openai.api_key = "sk-oCkkCqAtYNCnRHxnZpM1sPGq8tu1eSDuLC02uAtaNNLBTqSD"
-openai.base_url = "https://chatapi.onechats.top/v1/"
+openai.api_key = ""
+openai.base_url = ""
 client = OpenAI(api_key=openai.api_key, base_url=openai.base_url)
 api_model = "gpt-4o-mini"
+
 Language.build_library(
 	
 	# Store the library in the `build` directory
