@@ -96,7 +96,7 @@ cd looprepair
 pip install -r requirements.txt -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple some-package
 ```
 
-___Step 7___: Add OpenAI `base_url` and `api_key` in `Lines 12, 13, and 15` in [LLMRepair.py](./src/looprepair/LLMrepair.py).
+___Step 7___: Add OpenAI `base_url` and `api_key` in `Lines 12, 13, and 15` in [LLMRepair.py](./src/looprepair/LLMRepair.py).
 ```
 openai.api_key = ""
 openai.base_url = ""
