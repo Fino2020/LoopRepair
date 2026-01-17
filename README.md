@@ -96,10 +96,11 @@ cd looprepair
 pip install -r requirements.txt -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple some-package
 ```
 
-___Step 7___: Add OpenAI `base_url` and `api_key` in `Lines 16-17` in `LLMRepair.py`.
+___Step 7___: Add OpenAI `base_url` and `api_key` in `Lines 12, 13, and 15` in `LLMRepair.py`.
 ```
 openai.api_key = ""
 openai.base_url = ""
+api_model = "gpt-4o-mini" # you can change the model name here.
 ```
 
 ___Step 8___: Run repair. *Noting that `copy` the `/data/` directory first using `cp /data/ /data_bak/`, because the original program will be modified if you terminate.*
