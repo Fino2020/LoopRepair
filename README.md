@@ -7,7 +7,7 @@ LoopRepair improves iterative repair strategies by Location-Aware and Trace-Guid
 
 ![Workflow](workflow/Workflow.jpg)
 
-## Install VulnLoc+ Dataset
+## Install VulnLoc+ Benchmark
 ___Method 1___: Download docker image (Recomend)
 ```
 docker pull fino2020/looprepair:v1.0
