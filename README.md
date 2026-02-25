@@ -51,7 +51,7 @@ ___Step 1___: Download our LoopRepair project to `path/to/looprepair`. The `path
 ___Step 2___: If you have installed this docker image, use the following code to create the container. Replacing `path/to/looprepair` using your own directory path.
 
 ```
-docker run  --name LoopRepair  -v path/to/looprepair/results:/results   -v path/to/looprepair/logs:/logs -v path/to/looprepair/src:/looprepair -t crepair:aio
+docker run  --name LoopRepair  -v path/to/looprepair/results:/results   -v path/to/looprepair/logs:/logs -v path/to/looprepair/src:/looprepair -t fino2020/looprepair:v1.0
 ```
 
 ___Step 3___: Use the following code to get into the container.
