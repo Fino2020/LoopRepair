@@ -55,7 +55,7 @@ docker run  --name LoopRepair  -v path/to/looprepair/results:/results   -v path/
 ___Step 3___: Use the following code to get into the container.
 
 ```
-docker exec -it crepair:aio bash
+docker exec -it fino2020/looprepair:v1.0 bash
 ``` 
 
 ___Step 4___: Install the Anaconda3. wget the Anaconda3-2024.02-1-Linux-x86_64.sh by yourself and install Anaconda3.
