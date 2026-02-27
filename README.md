@@ -1,7 +1,7 @@
 ## LoopRepair
 
 This repository shows the source code of paper `Well Begun is Half Done: Location-Aware and Trace-Guided Iterative Automated Vulnerability Repair`.
-LoopRepair improves iterative repair strategies by Location-Aware and Trace-Guided Iterative Automated Vulnerability Repair (AVR).
+LoopRepair improves iterative repair strategies by Location-Aware and Trace-Guided strageties.
 
 ## Workflow
 
