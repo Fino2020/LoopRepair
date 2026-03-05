@@ -1,4 +1,4 @@
-## LoopRepair
+## LoopRepair (ICSE 2026 Distinguished Paper Award)
 
 This repository shows the source code of paper `Well Begun is Half Done: Location-Aware and Trace-Guided Iterative Automated Vulnerability Repair`.
 LoopRepair improves iterative repair strategies by Location-Aware and Trace-Guided strageties.
