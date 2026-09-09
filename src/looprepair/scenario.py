@@ -659,12 +659,12 @@ class Scenario:
             if os.path.exists(self.analysis_directory):
                 if os.path.exists(os.path.join(self.analysis_directory, "klee-out-concrete-0", 'taint.log')):
                     with open(os.path.join(self.analysis_directory, "klee-out-concrete-0", 'taint.log')) as f:
-                        readline = f.readline()
-                        average = float(len(readline))
+                        readlines = f.readlines()
+                        average = float(len(readlines))
                 if os.path.exists(os.path.join(self.analysis_directory, "klee-out-taint-0", 'taint.log')):
                     with open(os.path.join(self.analysis_directory, "klee-out-taint-0", 'taint.log')) as f:
-                        readline = f.readline()
-                        average = float(len(readline))
+                        readlines = f.readlines()
+                        average = float(len(readlines))
             
             # # 基于分支覆盖的排序方式
             # readline = []
