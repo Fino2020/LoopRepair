@@ -14,7 +14,7 @@ docker pull fino2020/looprepair:v1.0
 ```
 
 ___Method 2___: Build from source code
-Please go to [CrashRepair](https://github.com/nus-apr/CrashRepair) project to download the docker images. And the original VulnLoc dataset is provided by [VulnLoc](https://github.com/VulnLoc/VulnLoc).
+Use [CrashRepair](https://github.com/nus-apr/CrashRepair) project to download the source code. And the original VulnLoc dataset is provided by [VulnLoc](https://github.com/VulnLoc/VulnLoc).
 
 ```
 git clone https://github.com/nus-apr/CrashRepair.git
